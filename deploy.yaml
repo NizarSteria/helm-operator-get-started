@@ -62,13 +62,15 @@ spec:
             - containerPort: 3306
               name: db-port
         env:
-            - name: MARIADB_USER
-              value: bn_wordpress
-            - name: MARIADB_DATABASE
-              value: bitnami_wordpress
-            - name: MARIADB_DATABASE
-              value: bitnami_wordpress
-            - name: MARIADB_PASSWORD
-              value: securepassword123
-            - name: MARIADB_ROOT_PASSWORD
-              value: moresecurepassword1234
+            - name: MARIADB_HOST
+              value: mariadb
+            - name: MARIADB_PORT_NUMBER
+              value: 3306
+            - name: PRESTASHOP_HOST
+              value: localhost
+            - name: PRESTASHOP_DATABASE_USER
+              value: bn_prestashop
+            - name: PRESTASHOP_DATABASE_NAME
+              value: bitnami_prestashop
+            - name: ALLOW_EMPTY_PASSWORD
+              value: yes
