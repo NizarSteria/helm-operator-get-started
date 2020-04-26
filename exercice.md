@@ -2,4 +2,49 @@ kubectl create ns application
 
 Un Deployment PrestaShop avec l'image bitnami/prestashop:1.7:
 
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: PrestaShop
+  namespace: application
+spec:
+  replicas: 1
+  template:
+    metadata:
+      creationTimestamp:
+      labels:
+        service: application
+    spec:
+      containers:
+      - name: bitnami
+        image: bitnami/prestashop:1.7
+---
 
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mariadb-deployment
+  labels:
+    app: mariadb
+    type: database
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mariadb
+        type: database
+    spec:
+      containers:
+        - name: mariadb
+          image: bitnami/mariadb:10.1
+          ports:
+            - containerPort: 3306
+              name: db-port
+          env:
+            - name: PRESTASHOP_DATABASE_NAME
+              value: db1
+            - name: PRESTASHOP_DATABASE_USER
+              value: user
+            - name: PRESTASHOP_DATABASE_PASSWORD
+              value: my-password            
