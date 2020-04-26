@@ -86,5 +86,9 @@ spec:
               value: bn_wordpress
             - name: MARIADB_DATABASE
               value: bitnami_wordpress
-            - name: ALLOW_EMPTY_PASSWORD
-              value: yes
+            - name: MARIADB_DATABASE
+              value: bitnami_wordpress
+            - name: MARIADB_PASSWORD
+              value: securepassword123
+            - name: MARIADB_ROOT_PASSWORD
+              value: moresecurepassword1234
