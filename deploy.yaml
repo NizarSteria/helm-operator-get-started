@@ -74,3 +74,30 @@ spec:
               value: bitnami_prestashop
             - name: ALLOW_EMPTY_PASSWORD
               value: "yes"
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: development
+  labels:
+    name: development
+---
+echo 'securepassword123' | base64 ==> c2VjdXJlcGFzc3dvcmQxMjMK
+echo 'c2VjdXJlcGFzc3dvcmQxMjMK' | base64 --decode ==> securepassword123
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+type: Opaque
+data:
+  MARIADB_USER: bn_wordpress
+  MARIADB_DATABASE: bitnami_wordpress
+  MARIADB_PASSWORD: c2VjdXJlcGFzc3dvcmQxMjMK
+  MARIADB_ROOT_PASSWORD: bW9yZXNlY3VyZXBhc3N3b3JkMTIzNAo=
+  MARIADB_HOST: mariadb
+  MARIADB_PORT_NUMBER: "3306"
+  PRESTASHOP_HOST: localhost
+  PRESTASHOP_DATABASE_USER: bn_prestashop
+  PRESTASHOP_DATABASE_NAME: bitnami_prestashop
+  ALLOW_EMPTY_PASSWORD: "yes"
