@@ -78,3 +78,13 @@ spec:
       containers:
       - image: bitnami/prestashop:1.7
         name: prestashop
+        ports:
+            - containerPort: 3306
+              name: db-port
+        env:
+            - name: MARIADB_USER
+              value: bn_wordpress
+            - name: MARIADB_DATABASE
+              value: bitnami_wordpress
+            - name: ALLOW_EMPTY_PASSWORD
+              value: yes
