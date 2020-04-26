@@ -108,3 +108,53 @@ data:
   PRESTASHOP_DATABASE_USER: bn_prestashop
   PRESTASHOP_DATABASE_NAME: bitnami_prestashop
   ALLOW_EMPTY_PASSWORD: "yes"
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mariadb-deployment
+  name: mariadb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mariadb-deployment
+    spec:
+      containers:
+      - image: bitnami/mariadb:10.1
+        name: mariadb
+        ports:
+            - containerPort: 3306
+              name: db-port
+        env:
+            # Database that will be created
+            # WordPress must use these credentials
+            - name: MARIADB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: MARIADB_USER
+            - name: MARIADB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: MARIADB_DATABASE
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysecret
+                  key: MARIADB_PASSWORD
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysecret
+                  key: MARIADB_ROOT_PASSWORD
