@@ -34,3 +34,47 @@ spec:
               value: securepassword123
             - name: MARIADB_ROOT_PASSWORD
               value: moresecurepassword1234
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mariadb-deployment
+  name: mariadb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: prestashop-deployment
+    spec:
+      containers:
+      - image: apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: prestashop-deployment
+  name: prestashop-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prestashop-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: prestashop-deployment
+    spec:
+      containers:
+      - image: bitnami/prestashop:1.7
+        name: prestashop
