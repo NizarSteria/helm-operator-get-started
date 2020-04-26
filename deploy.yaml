@@ -65,7 +65,7 @@ spec:
             - name: MARIADB_HOST
               value: mariadb
             - name: MARIADB_PORT_NUMBER
-              value: 3306
+              value: "3306"
             - name: PRESTASHOP_HOST
               value: localhost
             - name: PRESTASHOP_DATABASE_USER
@@ -73,4 +73,4 @@ spec:
             - name: PRESTASHOP_DATABASE_NAME
               value: bitnami_prestashop
             - name: ALLOW_EMPTY_PASSWORD
-              value: yes
+              value: "yes"
