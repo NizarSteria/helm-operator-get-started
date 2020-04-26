@@ -158,3 +158,62 @@ spec:
                 secretKeyRef:
                   name: mysecret
                   key: MARIADB_ROOT_PASSWORD
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: prestashop-deployment
+  name: prestashop-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prestashop-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: prestashop-deployment
+    spec:
+      containers:
+      - image: bitnami/prestashop:1.7
+        name: prestashop
+        ports:
+            - containerPort: 3306
+              name: db-port
+        env:
+            - name: MARIADB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: MARIADB_HOST
+            - name: MARIADB_PORT_NUMBER
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: MARIADB_PORT_NUMBER
+            - name: PRESTASHOP_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: MARIADB_HOST
+            - name: PRESTASHOP_DATABASE_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: PRESTASHOP_HOST
+            - name: PRESTASHOP_DATABASE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: PRESTASHOP_DATABASE_NAME
+            - name: ALLOW_EMPTY_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: ALLOW_EMPTY_PASSWORD
+---
