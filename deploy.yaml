@@ -91,10 +91,17 @@ metadata:
   name: mysecret
 type: Opaque
 data:
-  MARIADB_USER: bn_wordpress
-  MARIADB_DATABASE: bitnami_wordpress
   MARIADB_PASSWORD: c2VjdXJlcGFzc3dvcmQxMjMK
   MARIADB_ROOT_PASSWORD: bW9yZXNlY3VyZXBhc3N3b3JkMTIzNAo=
+---
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfig
+data:
+  MARIADB_USER: bn_wordpress
+  MARIADB_DATABASE: bitnami_wordpress
   MARIADB_HOST: mariadb
   MARIADB_PORT_NUMBER: "3306"
   PRESTASHOP_HOST: localhost
