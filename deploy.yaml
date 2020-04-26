@@ -304,3 +304,40 @@ spec:
         - name: mariadb-data
           persistentVolumeClaim:
             claimName: mariadb-data-claim 
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: database
+  creationTimestamp:
+  labels:
+    service: database
+spec:
+  ports:
+  - name: '3306'
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+  selector:
+    service: database
+status:
+  loadBalancer: {}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: web
+  creationTimestamp:
+  labels:
+    service: web
+spec:
+  ports:
+  - name: '8080'
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  selector:
+    service: web
+  type: LoadBalancer
+status:
+  loadBalancer: {}
