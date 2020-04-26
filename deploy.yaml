@@ -41,26 +41,6 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: mariadb-deployment
-  name: mariadb-deployment
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mariadb-deployment
-  strategy: {}
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        app: prestashop-deployment
-    spec:
-      containers:
-      - image: apiVersion: apps/v1
-kind: Deployment
-metadata:
-  creationTimestamp: null
-  labels:
     app: prestashop-deployment
   name: prestashop-deployment
 spec:
