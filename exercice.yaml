@@ -2,8 +2,9 @@ kubectl create ns application
 
 Un Deployment PrestaShop avec l'image bitnami/prestashop:1.7:
 
+
+apiVersion: apps/v1beta1
 kind: Deployment
-apiVersion: extensions/v1beta1
 metadata:
   name: PrestaShop
   namespace: application
@@ -18,12 +19,13 @@ spec:
       containers:
       - name: bitnami
         image: bitnami/prestashop:1.7
+        
 ---
-
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: mariadb-deployment
+  namespace: application
   labels:
     app: mariadb
     type: database
