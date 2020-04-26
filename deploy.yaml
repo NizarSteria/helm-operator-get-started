@@ -34,13 +34,3 @@ spec:
               value: securepassword123
             - name: MARIADB_ROOT_PASSWORD
               value: moresecurepassword1234
-         volumeMounts:
-            - name: mariadb-vol
-              mountPath: /bitnami
-      volumes:
-        - name: mariadb-vol
-          hostPath:
-            path: /tmp/mariadb
-            type: emty {}
-        resources: {}
-status: {}
