@@ -1,0 +1,130 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prestashop
+  labels:
+    app: prestashop
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: prestashop
+    tier: frontend
+  type: LoadBalancer
+  
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+type: Opaque
+data:
+  MARIADB_PASSWORD: c2VjdXJlcGFzc3dvcmQxMjMK
+  MARIADB_ROOT_PASSWORD: bW9yZXNlY3VyZXBhc3N3b3JkMTIzNAo=
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfig
+data:
+  MARIADB_USER: bn_wordpress
+  MARIADB_DATABASE: bitnami_wordpress
+  MARIADB_HOST: mariadb
+  MARIADB_PORT_NUMBER: "3306"
+  PRESTASHOP_HOST: localhost
+  PRESTASHOP_DATABASE_USER: bn_prestashop
+  PRESTASHOP_DATABASE_NAME: bitnami_prestashop
+  ALLOW_EMPTY_PASSWORD: "yes"
+---
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: mariadb-data-disk
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+ ---
+ 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wp-pv-claim
+  labels:
+    app: prestashop
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prestashop
+  labels:
+    app: prestashop
+spec:
+  selector:
+    matchLabels:
+      app: prestashop
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: prestashop
+        tier: frontend
+    spec:
+      containers:
+      - image: bitnami/prestashop:1.7
+        name: prestashop
+        ports:
+            - containerPort: 3306
+              name: db-port
+        env:
+            - name: MARIADB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: MARIADB_HOST
+            - name: MARIADB_PORT_NUMBER
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: MARIADB_PORT_NUMBER
+            - name: PRESTASHOP_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: MARIADB_HOST
+            - name: PRESTASHOP_DATABASE_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: PRESTASHOP_HOST
+            - name: PRESTASHOP_DATABASE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: PRESTASHOP_DATABASE_NAME
+            - name: ALLOW_EMPTY_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: ALLOW_EMPTY_PASSWORD
+        volumeMounts:
+        - name: prestashop-persistent-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: prestashop-persistent-storage
+        persistentVolumeClaim:
+          claimName: wp-pv-claim
