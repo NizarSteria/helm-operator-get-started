@@ -92,8 +92,8 @@ spec:
                 secretKeyRef:
                   name: mysecret
                   key: MARIADB_ROOT_PASSWORD
-            volumeMounts:
-              - name: mariadb-data
+        volumeMounts:
+            - name: mariadb-data
               mountPath: /var/lib/mariadb      
       volumes:
         - name: mariadb-data
