@@ -124,7 +124,7 @@ spec:
                   key: ALLOW_EMPTY_PASSWORD
         volumeMounts:
         - name: prestashop-persistent-storage
-          mountPath: /data/bitnami
+          mountPath: /bitnami/prestashop
       volumes:
       - name: prestashop-persistent-storage
         persistentVolumeClaim:
