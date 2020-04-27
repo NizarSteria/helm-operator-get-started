@@ -10,7 +10,7 @@ spec:
   selector:
     app: prestashop
     tier: frontend
-  type: LoadBalancer
+  type: NodePort
   
 ---
 apiVersion: v1
@@ -22,6 +22,7 @@ data:
   MARIADB_PASSWORD: c2VjdXJlcGFzc3dvcmQxMjMK
   MARIADB_ROOT_PASSWORD: bW9yZXNlY3VyZXBhc3N3b3JkMTIzNAo=
 ---
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -48,13 +49,13 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/mnt/data"
+    path: "/mnt/prestashop_data"
  ---
  
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: wp-pv-claim
+  name: prestashop-pv-claim
   labels:
     app: prestashop
 spec:
@@ -123,8 +124,8 @@ spec:
                   key: ALLOW_EMPTY_PASSWORD
         volumeMounts:
         - name: prestashop-persistent-storage
-          mountPath: /var/www/html
+          mountPath: /data/bitnami
       volumes:
       - name: prestashop-persistent-storage
         persistentVolumeClaim:
-          claimName: wp-pv-claim
+          claimName: prestashop-pv-claim
