@@ -1,0 +1,101 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mariadb
+  creationTimestamp:
+  labels:
+    service: mariadb
+spec:
+  ports:
+  - name: '3306'
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+  selector:
+    service: mariadb
+status:
+  loadBalancer: {}
+---
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: mariadb-data-disk
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mariadb-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+status: {}
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mariadb-deployment
+  name: mariadb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mariadb-deployment
+    spec:
+      containers:
+      - image: bitnami/mariadb:10.1
+        name: mariadb
+        ports:
+            - containerPort: 3306
+              name: db-port
+        env:
+            # Database that will be created
+            # WordPress must use these credentials
+            - name: MARIADB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: MARIADB_USER
+            - name: MARIADB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: myconfig
+                  key: MARIADB_DATABASE
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysecret
+                  key: MARIADB_PASSWORD
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysecret
+                  key: MARIADB_ROOT_PASSWORD
+            volumeMounts:
+              - name: mariadb-data
+              mountPath: /var/lib/mariadb      
+      volumes:
+        - name: mariadb-data
+          persistentVolumeClaim:
+            claimName: mariadb-pv-claim
