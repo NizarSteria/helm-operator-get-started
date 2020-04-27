@@ -50,7 +50,7 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: "/mnt/prestashop_data"
- ---
+---
  
 apiVersion: v1
 kind: PersistentVolumeClaim
