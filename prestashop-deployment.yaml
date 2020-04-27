@@ -41,7 +41,7 @@ data:
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: mariadb-data-disk
+  name: prestashop-data-disk
 spec:
   storageClassName: manual
   capacity:
@@ -49,7 +49,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/mnt/prestashop_data"
+    path: "/mnt/prestashop"
 ---
  
 apiVersion: v1
